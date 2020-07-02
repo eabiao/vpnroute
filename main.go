@@ -15,7 +15,8 @@ import (
 func main() {
 	if !isAdmin() {
 		fmt.Println("请以管理员身份运行脚本")
-		pause()
+		fmt.Println("按回车键退出程序...")
+		fmt.Scanln()
 		return
 	}
 
@@ -57,11 +58,6 @@ func showMsg(msg string) {
 		fmt.Println(msg)
 		cacheMsg = msg
 	}
-}
-
-func pause() {
-	fmt.Println("按回车键继续...")
-	fmt.Scanln()
 }
 
 // 检查路由状态
