@@ -1,1 +1,2 @@
 # vpnroute
+自动配置windows下vpn静态路由的小工具
