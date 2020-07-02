@@ -24,29 +24,18 @@ func main() {
 		vpnIp := getVpnIPAddr()
 		if vpnIp == "" {
 			showMsg("vpn未连接，请检查vpn状态")
-			wait()
-			continue
+			goto wait
 		}
 
 		if isRouteExist() {
 			showMsg("路由添加成功，VPN IP：" + vpnIp)
-			wait()
-			continue
+			goto wait
 		}
+		addRoute(vpnIp)
 
-		result := addRoute(vpnIp)
-		if strings.Contains(result, "操作完成") {
-			showMsg("路由添加成功，VPN IP：" + vpnIp)
-		} else {
-			showMsg(result)
-		}
-		wait()
+	wait:
+		time.Sleep(1 * time.Second)
 	}
-}
-
-// 休息1s
-func wait() {
-	time.Sleep(1 * time.Second)
 }
 
 // 缓存信息
@@ -67,9 +56,14 @@ func isRouteExist() bool {
 }
 
 // 添加静态路由
-func addRoute(vpnIp string) string {
+func addRoute(vpnIp string) {
 	result := execute("route add 192.168.138.0 mask 255.255.255.0 " + vpnIp)
-	return strings.TrimSpace(result)
+	result = strings.TrimSpace(result)
+	if strings.Contains(result, "操作完成") {
+		showMsg("路由添加成功，VPN IP：" + vpnIp)
+	} else {
+		showMsg(result)
+	}
 }
 
 // 获取本机vpn的ip地址
